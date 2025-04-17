@@ -1,0 +1,9 @@
+.footer {
+  @apply max-w-[1200px] mx-auto border-t border-t-gray-200 flex justify-between items-center py-4 px-2 mt-8;
+  p {
+    @apply text-gray-700 flex gap-4 items-center rounded-md py-2 px-6 hover:bg-gray-200 duration-300 cursor-pointer;
+    span {
+      @apply text-gray-900;
+    }
+  }
+}

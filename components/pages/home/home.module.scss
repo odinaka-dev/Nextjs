@@ -1,0 +1,9 @@
+.textcontents {
+  @apply text-white;
+  h1 {
+    @apply font-semibold text-5xl text-balance my-4;
+  }
+  p {
+    @apply font-medium text-balance text-xl;
+  }
+}
