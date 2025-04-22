@@ -1,10 +1,10 @@
-"use client";
+"use server";
 
 import React from "react";
 
 interface Props {
   params: {
-    id: number;
+    id: string;
   };
 }
 
@@ -16,7 +16,7 @@ async function getProduct(id: string) {
 
 export default async function SingleProduct({ params }: Props) {
   const { id } = params;
-  const product = await getProduct(params.id.toString());
+  const product = await getProduct(params.id);
 
   return (
     <div className="py-16 flex justify-center items-center">
