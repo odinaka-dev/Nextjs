@@ -1,27 +1,39 @@
-"use server";
+"use client";
 
 import React from "react";
+import useCartStore from "@/components/Store/cartStore";
+import toast from "react-hot-toast";
+
+interface Product {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  price: number;
+}
 
 interface Props {
-  params: {
-    id: string;
-  };
+  product: Product;
 }
 
-async function getProduct(id: string) {
-  const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+export default function SingleProduct({ product }: Props) {
 
-  return res.json();
-}
+  
 
-export default async function SingleProduct({ params }: Props) {
-  const { id } = params;
-  const product = await getProduct(params.id);
+  // state function for the add to cart
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const handleAdd = () => {
+    addToCart(product);
+    toast.success(`${product.title} added to cart`);
+
+  }
+
 
   return (
     <div className="py-16 flex justify-center items-center">
       <div className="grid grid-cols-2 items-center gap-8">
-        <div className="w-full h-100 flex justify-end">
+        <div className="w-1/2 h-100 flex justify-end items-end relative left-80">
           <img src={product.image} alt="" className="" />
         </div>
         <div className="mr-40">
@@ -29,14 +41,10 @@ export default async function SingleProduct({ params }: Props) {
             {product.title}
           </h1>
           <p className="text-base leading-6 py-4">{product.description}</p>
+          <p className="text-3xl font-bold">${Math.floor(product.price)}</p>
           <div className="btn flex items-center gap-4">
-            <button className="bg-black text-white py-2 px-6 hover:bg-red-700 duration-300">
+            <button className="bg-black text-white py-2 px-6 hover:bg-red-700 duration-300" onClick={handleAdd}>
               Add to Cart
-            </button>
-            <button className="flex gap-4 justify-between items-center font-bold text-black bg-gray-300 py-2 px-6">
-              <span className="cursor-pointer text-xl relative right-4">+</span>
-              <span>0</span>
-              <span className="cursor-pointer text-xl relative left-4">-</span>
             </button>
           </div>
         </div>
