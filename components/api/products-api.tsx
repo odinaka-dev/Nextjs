@@ -3,46 +3,39 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
-const Base_url = "https://fakestoreapi.com/products";
+// tanstack functionality
+import { getProducts } from "@/server/user";
+import { useQuery } from "@tanstack/react-query";
 
-// the typescript logic for all the products
-
-interface List {
-  id: number;
-  title: string;
-  category: string;
-  image: string;
-  price: number;
-  description: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
-
-// for the list of products
+// const Base_url = "https://fakestoreapi.com/products";
 
 export function ProductsApi() {
-  const [productlist, setProductList] = useState<List[]>([]);
-  const fetcher = async () => {
-    try {
-      const res = await fetch(`${Base_url}`);
-      const data = await res.json();
-      if (res.status === 200) {
-        setProductList(data.slice(0, 4));
-      }
-    } catch (error) {
-      console.error("could not fetch the product", error);
-    }
-  };
+  // tanstack query functionality
 
-  useEffect(() => {
-    fetcher();
-  }, []);
+  const { isPending, data, error } = useQuery({
+    queryKey: ["products"],
+    queryFn: getProducts,
+  });
+
+  if(isPending){
+    return (
+      <div>
+        <span>is pending</span>
+      </div>
+    )
+  }
+
+  if(error) {
+    return (
+      <div>
+        <span>error fetching</span>
+      </div>
+    )
+  }
 
   return (
     <section className="grid grid-cols-4 gap-8 items-center ">
-      {productlist?.map((item: List) => (
+      {data?.map((item) => (
         <Link href={`/${item.id}`} key={item.id}>
           <div className="">
             <div className="flex justify-center">
