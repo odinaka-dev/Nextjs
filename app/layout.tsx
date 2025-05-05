@@ -22,7 +22,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning={false}>
+    <html
+      lang="en"
+      suppressHydrationWarning={false}
+      className="light"
+      style={{ colorScheme: "light" }}
+    >
       <body className={`${roboto.className} flex flex-col min-h-screen`}>
         <Providers>
           <MainLayout>{children}</MainLayout>

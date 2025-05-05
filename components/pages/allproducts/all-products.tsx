@@ -6,6 +6,14 @@ import useCartStore from "@/components/Store/cartStore";
 import toast from "react-hot-toast";
 import Link from "next/link";
 
+// importing the function for all products from tanstack.
+import { AllProducts } from "@/server/user";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+
+import { Card, Image, Text } from "@chakra-ui/react";
+
+// add to cart information.
 interface Items {
   id: string;
   title: string;
@@ -19,50 +27,89 @@ interface Items {
   };
 }
 
-export default function HomeContent(product : Items) {
+export default function HomeContent(product: Items) {
   // typescript
-  const [content, setContent] = useState<Items[]>([]);
-
-
   // state function for the add to cart
   const addToCart = useCartStore((state) => state.addToCart);
 
+  // handling add to cart section
   const handleAdd = () => {
     addToCart(product);
     toast.success(`${product.title} added to cart`);
   };
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch("https://fakestoreapi.com/products");
-      const data = await res.json();
-      if (res.status === 200) {
-        setContent(data);
-        console.log(data);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  // tanstack fetch functionality
+  const { isPending, error, data } = useQuery({
+    queryKey: ["allProducts"],
+    queryFn: AllProducts,
+  });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  if (isPending) {
+    return (
+      <div className="">
+        <span>is loading</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="">
+        <span>error fetching this page...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[80%] mx-auto px-4 py-4">
-      <section className="grid grid-cols-4 gap-2 items-center">
-        {content?.map((item: Items) => (
-          <Link href={`/${item.id}`} key={item.id}>
-            <div className="">
-              <img src={item.image} alt="" width={100} height={100} />
-              <p className="font-bold text-balance font-mono">{item.title}</p>
-              <p>{item.category}</p>
-              <button className="text-sm text-right cursor-pointer">
-                View product
-              </button>
+      <section className="grid grid-cols-3 gap-2 items-center">
+        {data?.map((item: Items) => (
+          <Card.Root
+            maxWidth="sm"
+            overflow="hidden"
+            className="border shadow-md hover:border-red-400 duration-300 cursor-pointer"
+          >
+            <div className="h-[150px] flex justify-center items-center">
+              <Image
+                src={item.image}
+                alt="Green double couch with wooden legs"
+                width={100}
+                style={{ objectFit: "cover", borderRadius: "8px" }}
+              />
             </div>
-          </Link>
+            {/* <Image
+              src={item.image}
+              alt="Green double couch with wooden legs"
+              width={150}
+              style={{ objectFit: "cover", borderRadius: "8px" }}
+            /> */}
+            <Card.Body gap="2">
+              <Card.Title
+                fontWeight={600}
+                textTransform={"capitalize"}
+                lineClamp={1}
+              >
+                {item.title}
+              </Card.Title>
+              <Card.Description lineClamp={2}>
+                {item.description}
+              </Card.Description>
+              <Text
+                textStyle="2xl"
+                fontWeight={600}
+                letterSpacing="tight"
+                mt="2"
+              >
+                ${item.price}
+              </Text>
+            </Card.Body>
+            <Card.Footer gap="2">
+              <Button>
+                <Link href={`/${item.id}`}>Check out</Link>
+              </Button>
+              <Button onClick={handleAdd}>Add to cart</Button>
+            </Card.Footer>
+          </Card.Root>
         ))}
       </section>
     </div>

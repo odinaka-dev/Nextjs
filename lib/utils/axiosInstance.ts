@@ -1,5 +1,5 @@
-import { baseURL } from "@/app/(websites)/config";
 import axios from "axios";
+import { baseURL } from "@/config/index";
 
 const axiosInstance = axios.create({
   baseURL,

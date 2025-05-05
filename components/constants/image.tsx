@@ -2,6 +2,7 @@ import { StaticImageData } from "next/image";
 // imports for the images
 import Hero from "@/public/assets/img/Hero.png";
 import Apple from "@/public/assets/img/apple.png";
+import HeroAuth from "@/public/assets/img/login.avif";
 
 // imports for the icons
 import CategoryCamera from "@/public/assets/icons/Category-Camera.png";
@@ -14,6 +15,7 @@ import categoryHeadphone from "@/public/assets/icons/Category-Headphone.png";
 interface ImageProps {
   Hero: StaticImageData;
   Apple: StaticImageData;
+  HeroAuth: StaticImageData;
 }
 
 interface IconProps {
@@ -25,7 +27,7 @@ interface IconProps {
   categoryHeadphone: StaticImageData;
 }
 
-export const Images: ImageProps = { Hero, Apple };
+export const Images: ImageProps = { Hero, Apple, HeroAuth };
 
 export const Icons: IconProps = {
   CategoryCamera,

@@ -10,7 +10,6 @@ import Image from "next/image";
 import { Images } from "@/components/constants/image";
 import { FaArrowRight } from "react-icons/fa6";
 
-
 export default function HomeContent() {
   const CategoryLinks = [
     {
@@ -89,7 +88,10 @@ export default function HomeContent() {
               <h1 className={`${styles.h1}`}>Up to 10% off Voucher</h1>
               <div className="btn">
                 <button className="font-medium flex gap-2 items-center border-b border-b-white py-2 px-4 cursor-pointer hover:bg-white hover:text-gray-800 duration-300">
-                  shop now <span><FaArrowRight /></span>
+                  shop now{" "}
+                  <span>
+                    <FaArrowRight />
+                  </span>
                 </button>
               </div>
             </div>
